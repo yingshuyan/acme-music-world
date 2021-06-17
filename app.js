@@ -30,7 +30,7 @@ app.get('/api/albums', async(req, res, next)=> {
   }
 });
 
-app.get('/api/albums/:id', async(req, res, next)=> {
+app.get('/api/albums/:id/tracks', async(req, res, next)=> {
   try {
     res.send(await Track.findAll({
       order: [['idx']],

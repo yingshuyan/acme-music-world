@@ -41,7 +41,7 @@ describe('The API', ()=> {
     });
     describe('GET /api/albums/:id/tracks', ()=> {
       it('returns the albums tracks', async()=> {
-        const response = await app.get(`/api/albums/${seed.albums.afterHours.id}`);
+        const response = await app.get(`/api/albums/${seed.albums.afterHours.id}/tracks`);
         expect(response.status).to.equal(200);
         const songNames = response.body.map( track => track.song.name);
         const expected = [
