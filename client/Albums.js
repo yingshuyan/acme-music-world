@@ -2,7 +2,7 @@ import React from "react";
 
 const Albums = (props) => {
   return (
-    props.hashTag === "albums" &&
+    
     (props.tracks[0]
       ? props.tracks.map((track) => (
           <div key={track.id}>

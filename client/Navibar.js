@@ -2,15 +2,19 @@ import React from "react";
 
 const Navibar = (props) => {
   return (
-    <div>
+    <div className="navibar">
       <section>
-        <a href="/">Home</a>
+        <a className="navi" href="/">
+          Home
+        </a>
       </section>
       <section>
-        <a href="#artists">Artists ({props.artists.length})</a>
+        <a className="navi" href="#artists">
+          Artists ({props.artists.length})
+        </a>
       </section>
       <section>
-        <a href="#albums" onClick={props.onClick}>
+        <a className="navi" href="#albums" onClick={props.onClick}>
           Albums ({props.albums.length})
         </a>
       </section>
