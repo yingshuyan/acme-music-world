@@ -10,10 +10,9 @@ const Albums = (props) => {
           </div>
         ))
       : props.albums.map((album) => (
-          <div>
+          <div key={album.id}>
             <a
-              key={album.id}
-              href="javascript:;"
+              href="#albums"
               onClick={() => {
                 props.getTracks(album.id);
               }}
