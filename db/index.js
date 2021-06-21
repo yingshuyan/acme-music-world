@@ -1,45 +1,48 @@
-const Sequelize = require('sequelize');
+const Sequelize = require("sequelize");
 const { INTEGER, STRING, UUID, UUIDV4 } = Sequelize.DataTypes;
 
-const conn = new Sequelize(process.env.DATABASE_URL || 'postgres://localhost/acme_tdd');
+const conn = new Sequelize(
+  process.env.DATABASE_URL || "postgres://localhost/acme_tdd",
+  { logging: false }
+);
 
-const Artist = conn.define('artist', {
+const Artist = conn.define("artist", {
   id: {
     type: UUID,
     defaultValue: UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
-  name: STRING
+  name: STRING,
 });
 
-const Album = conn.define('album', {
+const Album = conn.define("album", {
   id: {
     type: UUID,
     defaultValue: UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
-  name: STRING
+  name: STRING,
 });
 
-const Song = conn.define('song', {
+const Song = conn.define("song", {
   id: {
     type: UUID,
     defaultValue: UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
   name: STRING,
   duration: {
-    type: INTEGER
-  }
+    type: INTEGER,
+  },
 });
 
-const Track = conn.define('track', {
+const Track = conn.define("track", {
   id: {
     type: UUID,
     defaultValue: UUIDV4,
-    primaryKey: true
+    primaryKey: true,
   },
-  idx: INTEGER
+  idx: INTEGER,
 });
 
 Album.belongsTo(Artist);
@@ -47,53 +50,74 @@ Song.belongsTo(Artist);
 Track.belongsTo(Album);
 Track.belongsTo(Song);
 
-const syncAndSeed = async()=> {
+const syncAndSeed = async () => {
   await conn.sync({ force: true });
   const [weeknd, metalica, adele] = await Promise.all([
-    Artist.create({ name: 'The Weeknd'}),
-    Artist.create({ name: 'Metalica'}),
-    Artist.create({ name: 'Adele'})
-  ]); 
-
-  const [ adele19, adele25, afterHours, theHighlights] = await Promise.all([
-    Album.create({ name: 'Adele 19', artistId: adele.id }),
-    Album.create({ name: 'Adele 25', artistId: adele.id }),
-    Album.create({ name: 'After Hours', artistId: weeknd.id }),
-    Album.create({ name: 'The Highlights', artistId: weeknd.id }),
+    Artist.create({ name: "The Weeknd" }),
+    Artist.create({ name: "Metalica" }),
+    Artist.create({ name: "Adele" }),
   ]);
 
-  const [ hello, whenWeWereYoung, dayDreamer, blindingLights, inYourEyes, saveYourTears] = await Promise.all([
-    Song.create({ name: 'Hello', artistId: adele.id, duration: 300 }),
-    Song.create({ name: 'When We Were Young', artistId: adele.id, duration: 350 }),
-    Song.create({ name: 'Day Dreamer', artistId: adele.id, duration: 350 }),
-    Song.create({ name: 'Blinding Lights', artistId: weeknd.id, duration: 400 }),
-    Song.create({ name: 'In Your Eyes', artistId: weeknd.id, duration: 410 }),
-    Song.create({ name: 'Save Your Tears', artistId: weeknd.id, duration: 410 }),
+  const [adele19, adele25, afterHours, theHighlights] = await Promise.all([
+    Album.create({ name: "Adele 19", artistId: adele.id }),
+    Album.create({ name: "Adele 25", artistId: adele.id }),
+    Album.create({ name: "After Hours", artistId: weeknd.id }),
+    Album.create({ name: "The Highlights", artistId: weeknd.id }),
+  ]);
+
+  const [
+    hello,
+    whenWeWereYoung,
+    dayDreamer,
+    blindingLights,
+    inYourEyes,
+    saveYourTears,
+  ] = await Promise.all([
+    Song.create({ name: "Hello", artistId: adele.id, duration: 300 }),
+    Song.create({
+      name: "When We Were Young",
+      artistId: adele.id,
+      duration: 350,
+    }),
+    Song.create({ name: "Day Dreamer", artistId: adele.id, duration: 350 }),
+    Song.create({
+      name: "Blinding Lights",
+      artistId: weeknd.id,
+      duration: 400,
+    }),
+    Song.create({ name: "In Your Eyes", artistId: weeknd.id, duration: 410 }),
+    Song.create({
+      name: "Save Your Tears",
+      artistId: weeknd.id,
+      duration: 410,
+    }),
   ]);
   await Promise.all([
-    Track.create({ songId: hello.id, albumId: adele25.id, idx: 1}),
-    Track.create({ songId: whenWeWereYoung.id, albumId: adele25.id, idx: 1}),
-    Track.create({ songId: dayDreamer.id, albumId: adele25.id, idx: 2}),
-    Track.create({ songId: blindingLights.id, albumId: theHighlights.id, idx: 2}),
-    Track.create({ songId: inYourEyes.id, albumId: theHighlights.id, idx: 2}),
-    Track.create({ songId: blindingLights.id, albumId: afterHours.id, idx: 2}), 
-    Track.create({ songId: inYourEyes.id, albumId: afterHours.id, idx: 1}),
-    Track.create({ songId: saveYourTears.id, albumId: afterHours.id, idx: 5}) 
+    Track.create({ songId: hello.id, albumId: adele25.id, idx: 1 }),
+    Track.create({ songId: whenWeWereYoung.id, albumId: adele25.id, idx: 1 }),
+    Track.create({ songId: dayDreamer.id, albumId: adele25.id, idx: 2 }),
+    Track.create({
+      songId: blindingLights.id,
+      albumId: theHighlights.id,
+      idx: 2,
+    }),
+    Track.create({ songId: inYourEyes.id, albumId: theHighlights.id, idx: 2 }),
+    Track.create({ songId: blindingLights.id, albumId: afterHours.id, idx: 2 }),
+    Track.create({ songId: inYourEyes.id, albumId: afterHours.id, idx: 1 }),
+    Track.create({ songId: saveYourTears.id, albumId: afterHours.id, idx: 5 }),
   ]);
   return {
     artists: {
       weeknd,
-      metalica
+      metalica,
     },
     albums: {
       theHighlights,
       adele19,
-      afterHours
-    }
+      afterHours,
+    },
   };
-
 };
-
 
 module.exports = {
   syncAndSeed,
@@ -101,6 +125,6 @@ module.exports = {
     Artist,
     Album,
     Track,
-    Song
-  }
+    Song,
+  },
 };

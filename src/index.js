@@ -1,4 +1,5 @@
-import React from 'react';
-import { render } from 'react-dom';
+import React from "react";
+import { render } from "react-dom";
+import Main from "../client/Main.js";
 
-render(<hr />, document.querySelector('#root'));
+render(<Main />, document.querySelector("#root"));
