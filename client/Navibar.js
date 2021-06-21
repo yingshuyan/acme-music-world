@@ -2,7 +2,7 @@ import React from "react";
 
 const Navibar = (props) => {
   return (
-    <div className="navibar">
+    <div>
       <section>
         <a href="/">Home</a>
       </section>
@@ -10,7 +10,9 @@ const Navibar = (props) => {
         <a href="#artists">Artists ({props.artists.length})</a>
       </section>
       <section>
-        <a href="#albums">Albums ({props.albums.length})</a>
+        <a href="#albums" onClick={props.onClick}>
+          Albums ({props.albums.length})
+        </a>
       </section>
     </div>
   );

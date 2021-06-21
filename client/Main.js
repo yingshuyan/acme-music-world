@@ -12,11 +12,23 @@ class Main extends React.Component {
       artists: [],
       albums: [],
       hashTag: null,
+      tracks: [],
     };
     this.getHashTag = this.getHashTag.bind(this);
+    this.getTrackOfAlbum = this.getTrackOfAlbum.bind(this);
+    this.resetSelectedAlbum = this.resetSelectedAlbum.bind(this);
   }
   getHashTag() {
     this.setState({ hashTag: window.location.hash.slice(1) });
+  }
+  resetSelectedAlbum() {
+    this.setState({ tracks: [] });
+  }
+  async getTrackOfAlbum(id) {
+    const response = await Axios.get(`/api/albums/${id}/tracks`);
+    const tracks = response.data;
+    this.setState({ tracks });
+    console.log(this.state.tracks);
   }
   async componentDidMount() {
     const responseArtist = await Axios.get("/api/artists");
@@ -30,15 +42,21 @@ class Main extends React.Component {
 
   render() {
     return (
-      <div>
+      <div className="navibar">
         <Navibar
           artists={this.state.artists}
           albums={this.state.albums}
           hashTag={this.state.hashTag}
+          onClick={this.resetSelectedAlbum}
         />
         <Home hashTag={this.state.hashTag} />
         <Artists artists={this.state.artists} hashTag={this.state.hashTag} />
-        <Albums albums={this.state.albums} hashTag={this.state.hashTag} />
+        <Albums
+          albums={this.state.albums}
+          hashTag={this.state.hashTag}
+          tracks={this.state.tracks}
+          getTracks={this.getTrackOfAlbum}
+        />
       </div>
     );
   }
